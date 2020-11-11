@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+    
+    <style>
+        .jumbotron {
+            text-align: center;
+        }
+
+        .reservationForm {
+            margin-right: 50px;
+            margin-left: 50px;
+            margin-bottom: 50px;
+        }   
+
+        #reservationAndWaitlistCards {
+            margin-right: 50px;
+            margin-left: 50px;
+            margin-bottom: 50px;
+        }
+
+        footer {
+            margin-right: 50px;
+            margin-left: 50px;
+            margin-bottom: 5px;
+        }
+        
+    </style>
+
+    <title>Restaurant Reservation System</title>
+  </head>
+  <body>
+    <div class="jumbotron">
+        <h1 class="display-4">Reserved Tables</h1>
+        <hr class="my-4">
+        <p>Book your seat before they are all gone!</p>
+        <a class="btn btn-primary btn-lg" href="/reserve" role="button">Make Reservation</a>
+        <a class="btn btn-danger btn-lg" href="/" role="button">Home</a>
+    </div>
+
+    <div id="reservationAndWaitlistCards">
+        <div id="reservationCards">
+            <div class="card-deck" id="reservationCardDeck"></div>
+        </div>
+    
+        <div id="waitlistCards"></div>
+    </div>
+
+    <footer>
+        <a href="/api/reservations/"><button type="button" class="btn btn-outline-success">View Confirmed Reservation API Data</button></a>
+        <a href="/api/waitlist/"><button type="button" class="btn btn-outline-danger">View Waiting List API Data</button></a>
+    </footer>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery.js"></script>
+
+    <!-- Option 2: jQuery, Popper.js, and Bootstrap JS
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+    -->
+
+    <script type="text/javascript">
+        $( document ).ready(function() {
+            $.get("/api/reservations/", function(data) {
+                console.log(data);
+
+                if (data.length !== 0) {
+
+                    $('#reservationCards').prepend(`<h3>Confirmed Reservations</h3>`);
+
+                    for(let i = 0; i < data.length; i++) {
+
+                        $("#reservationCardDeck").append(`
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">Table ${i + 1}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">ID: ${data[i].id}</h6>
+                                <p class="card-text">Reservation for ${data[i].name} at ${data[i].time}</p>
+                            </div>
+                        </div> 
+                        `)
+                    }
+
+                } else {
+                    $("#reservationCards").prepend(`<p>There are currently no confirmed reservations</p>`);
+                    $("#reservationCards").prepend(`<h3>Confirmed Reservations</h3>`);
+                }
+            });
+
+            $.get("/api/waitlist/", function(data) {
+                console.log("waitlist data: ", data);
+
+                if (data.length !== 0) {
+
+                    $('#waitlistCards').append(`<br><br><br>`)
+                    $('#waitlistCards').append(`<h3>Waitlist</h3>`);
+
+                    for(let i = 0; i < data.length; i++) {
+                        $("#waitlistCards").append(`
+                            <div class="card">
+                                <div class="card-body">
+                                    ${i + 1}. ${data[i].id}
+                                </div>
+                            </div>`
+                        );
+                    }
+
+                } else {
+                    $("#waitlistCards").append(`<br><br><br>`);
+                    $("#waitlistCards").append(`<h3>Waitlist</h3>`)
+                    $("#waitlistCards").append(`<p>There are currently no people on the waitlist</p>`);
+                }
+            });
+        });
+    </script>
+  </body>
+</html>

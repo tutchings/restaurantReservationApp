@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+    
+    <style>
+
+        .jumbotron {
+            text-align: center;
+        }
+
+        .reservationForm {
+            margin-right: 50px;
+            margin-left: 50px;
+            margin-bottom: 50px;
+        }   
+
+        footer {
+            margin-right: 50px;
+            margin-left: 50px;
+            margin-bottom: 5px;
+        }
+
+    </style>
+
+    <title>Restaurant Reservation System</title>
+  </head>
+  <body>
+    <div class="jumbotron">
+        <h1 class="display-4">Reserve Your Table</h1>
+        <hr class="my-4">
+        <p>Book your seat before they are all gone!</p>
+        <a class="btn btn-primary btn-lg" href="/" role="button">Home</a>
+        <a class="btn btn-danger btn-lg" href="/viewTables" role="button">View Tables</a>
+    </div>
+
+    <div class='reservationForm'>
+        <form>
+            <div class="form-group">
+              <label for="nameInput">Name:</label>
+              <input type="text" class="form-control" id="name">
+            </div>
+            <div class="form-group">
+                <label for="nameInput">Phone Number:</label>
+                <input type="text" class="form-control" id="phoneNumber">
+            </div>
+            <div class="form-group">
+                <label for="nameInput">Email:</label>
+                <input type="text" class="form-control" id="email">
+            </div>
+            <div class="form-group">
+                <label for="time">Reservation Time:</label>
+                <select id="time" class="form-control">
+                  <option selected>Select a Time</option>
+                  <option>10:00am</option>
+                  <option>10:30am</option>
+                  <option>11:00am</option>
+                  <option>11:30am</option>
+                  <option>12:00pm</option>
+                  <option>12:30pm</option>
+                  <option>1:00pm</option>
+                  <option>1:30pm</option>
+                  <option>2:00pm</option>
+                  <option>2:30pm</option>
+                  <option>3:00pm</option>
+                  <option>3:30pm</option>
+                  <option>4:00pm</option>
+                  <option>4:30pm</option>
+                  <option>5:00pm</option>
+                  <option>5:30pm</option>
+                  <option>6:00pm</option>
+                  <option>6:30pm</option>
+                  <option>7:00pm</option>
+                  <option>7:30pm</option>
+                  <option>8:00pm</option>
+                  <option>8:30pm</option>
+                  <option>9:00pm</option>
+                  <option>9:30pm</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="nameInput">Unique ID:</label>
+                <input type="text" class="form-control" id="id" aria-describedby="emailHelp">
+                <small id="emailHelp" class="form-text text-muted">This id will be used to confirm your reservation at the restaurant</small>
+            </div>
+            <button type="submit" class="btn btn-primary" id="addReservation">Submit</button>
+          </form> 
+    </div>
+
+    <footer>
+        <a href="/api/reservations/"><button type="button" class="btn btn-outline-success">View Confirmed Reservation API Data</button></a>
+        <button type="button" class="btn btn-outline-danger">View Waiting List API Data</button>
+    </footer>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery.js"></script>
+
+    <!-- Option 2: jQuery, Popper.js, and Bootstrap JS
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+    -->
+
+    <script type="text/javascript">
+        $("#addReservation").on("click", function(event) {
+            event.preventDefault();
+
+            $.get("/api/reservations", function(data) {
+                console.log("data.length: ", data.length);
+                if(data.length < 5) {
+                    var newReservation = {
+                        name: $("#name").val().trim(),
+                        phoneNumber: $("#phoneNumber").val().trim(),
+                        email: $("#email").val().trim(),
+                        id: $("#id").val().trim(),
+                        time: $("#time").val()
+                    };
+
+
+                    $("#name").val('');
+                    $("#phoneNumber").val('');
+                    $("#email").val('');
+                    $("#time").val('Select a Time');
+                    $("#id").val('');
+
+
+                    $.post("/api/reservations", newReservation)
+                        .then(function(data) {
+                            console.log("reserve.html", data);
+                            alert("Adding Reservation...");
+                        });
+                } else {
+                    var newWaitlist = {
+                        name: $("#name").val().trim(),
+                        phoneNumber: $("#phoneNumber").val().trim(),
+                        email: $("#email").val().trim(),
+                        id: $("#id").val().trim(),
+                        time: $("#time").val()
+                    };
+
+
+                    $("#name").val('');
+                    $("#phoneNumber").val('');
+                    $("#email").val('');
+                    $("#time").val('Select a Time');
+                    $("#id").val('');
+
+
+                    $.post("/api/waitlist", newWaitlist)
+                        .then(function(data) {
+                            console.log("reserve.html", data);
+                            alert("All tables are booked. Adding to waitlist...");
+                        });
+                }
+            })
+
+        });
+    </script>
+  </body>
+</html>
